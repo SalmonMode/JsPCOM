@@ -1,2 +1,2 @@
-# JsPCOM
-JavaScript page component object framework for Selenium
+# TsPCOM
+TypeScript and JavaScript page component object framework for Selenium
