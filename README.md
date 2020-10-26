@@ -20,7 +20,7 @@ Enough about that though. Here's a quick example to help explain the concepts an
 `src/pages/components/login.ts`:
 
 ```typescript
-import { PageComponent, Component } from 'JsPCOM';
+import { PageComponent, Component } from 'jspcom';
 import { By } from 'selenium-webdriver';
 
 class Password extends PageComponent {
@@ -48,7 +48,7 @@ export class LoginForm extends PageComponent {
 `src/pages/login.ts`:
 
 ```typescript
-import { Page, Component } from 'JsPCOM';
+import { Page, Component } from 'jspcom';
 import { LoginForm } from './components/login';
 
 class LoginPage extends Page {
