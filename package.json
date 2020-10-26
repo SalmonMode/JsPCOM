@@ -1,5 +1,5 @@
 {
-  "name": "jspcom",
+  "name": "tspcom",
   "version": "1.0.0",
   "description": "JavaScript page component object framework for Selenium",
   "main": "dist/index.js",
@@ -42,9 +42,9 @@
   "author": "Chris NeJame",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SalmonMode/JsPCOM/issues"
+    "url": "https://github.com/SalmonMode/TsPCOM/issues"
   },
-  "homepage": "https://github.com/SalmonMode/JsPCOM#readme",
+  "homepage": "https://github.com/SalmonMode/TsPCOM#readme",
   "devDependencies": {
     "tslint": "^6.1.3",
     "typescript": "^4.0.3"
