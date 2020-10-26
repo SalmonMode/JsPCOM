@@ -1,5 +1,5 @@
-# TsPCOM
-TsPCOM is page component object framework for TypeScript and JavaScript based around Selenium.
+# JsPCOM
+JsPCOM is page component object framework for TypeScript and JavaScript based around Selenium.
 
 It's built with TypeScript in mind for some fancy, more aesthetically pleasing features, but it's just as easy to use for JavaScript.
 
@@ -20,7 +20,7 @@ Enough about that though. Here's a quick example to help explain the concepts an
 `src/pages/components/login.ts`:
 
 ```typescript
-import { PageComponent, Component } from 'TsPCOM';
+import { PageComponent, Component } from 'JsPCOM';
 import { By } from 'selenium-webdriver';
 
 class Password extends PageComponent {
@@ -48,7 +48,7 @@ export class LoginForm extends PageComponent {
 `src/pages/login.ts`:
 
 ```typescript
-import { Page, Component } from 'TsPCOM';
+import { Page, Component } from 'JsPCOM';
 import { LoginForm } from './components/login';
 
 class LoginPage extends Page {

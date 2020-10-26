@@ -1,5 +1,5 @@
 {
-  "name": "TsPCOM",
+  "name": "JsPCOM",
   "version": "1.0.0",
   "description": "TypeScript and JavaScript page component object framework for Selenium",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SalmonMode/TsPCOM.git"
+    "url": "git+https://github.com/SalmonMode/JsPCOM.git"
   },
   "keywords": [
     "javascript",
@@ -42,9 +42,9 @@
   "author": "Chris NeJame",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SalmonMode/TsPCOM/issues"
+    "url": "https://github.com/SalmonMode/JsPCOM/issues"
   },
-  "homepage": "https://github.com/SalmonMode/TsPCOM#readme",
+  "homepage": "https://github.com/SalmonMode/JsPCOM#readme",
   "devDependencies": {
     "tslint": "^6.1.3",
     "typescript": "^4.0.3"
