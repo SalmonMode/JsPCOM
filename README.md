@@ -24,13 +24,13 @@ import { PageComponent, Component } from 'tspcom';
 import { By } from 'selenium-webdriver';
 
 class Password extends PageComponent {
-  By.id('password');
+  _locator = By.id('password');
 }
 class Username extends PageComponent {
-  By.id('username');
+  _locator = By.id('username');
 }
 export class LoginForm extends PageComponent {
-  By.id('loginForm');
+  _locator = By.id('loginForm');
 
   @Component
   username: Username;

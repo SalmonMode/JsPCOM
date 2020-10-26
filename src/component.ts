@@ -3,7 +3,7 @@ import { Locator, WebDriver, WebElement } from 'selenium-webdriver';
 import { Page } from './page';
 
 export class PageComponent {
-  locator: Locator;
+  _locator: Locator;
   protected _findFromParent: boolean = false;
   protected get _componentMapping(): { [componentName: string]: typeof PageComponent} { return {}};
   constructor(public parent: PageComponent | Page, public driver: WebDriver, ...args: any[]) {
@@ -23,7 +23,7 @@ export class PageComponent {
 
   async getElement(): Promise<WebElement> {
     let refNode = await this._getReferenceNode();
-    return refNode.findElement(this.locator);
+    return refNode.findElement(this._locator);
   }
 
   async clear(): Promise<void> {
