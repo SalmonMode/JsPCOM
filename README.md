@@ -17,6 +17,8 @@ This is still technically a "Page Object Framework", as it provides a `Page` cla
 
 Enough about that though. Here's a quick example to help explain the concepts and get you on the move:
 
+### TypeScript
+
 `src/pages/components/login.ts`:
 
 ```typescript
@@ -67,6 +69,68 @@ And then here's how you'd use it:
 `someScript.ts`:
 
 ```typescript
+// it's assumed that driver is a WebDriver instance
+
+const page = new LoginPage(driver);
+await page.login('myusername', 'mypassword');
+```
+
+### JavaScript
+
+`src/pages/components/login.js`:
+
+```javascript
+const { By } = require('selenium-webdriver');
+const { PageComponent } = require('jspcom');
+
+class Password extends PageComponent {
+  _locator = By.id('password');
+}
+class Username extends PageComponent {
+  _locator = By.id('username');
+}
+export class LoginForm extends PageComponent {
+  _locator = By.id('loginForm');
+  get _componentMappings() {
+    return {
+      username: Username,
+      password: Password
+    };
+  }
+
+  async fillOut(username: string, password: string) {
+    await this.username.sendKeys(username);
+    await this.password.sendKeys(password);
+  }
+}
+
+```
+
+`src/pages/login.js`:
+
+```javascript
+const { Page } = require('jspcom');
+const { LoginForm } = require('./components/login');
+
+class LoginPage extends Page {
+  get _componentMappings() {
+    return {
+      loginForm: LoginForm
+    };
+  }
+
+  async login(username: string, password: string) {
+    await this.loginForm.fillOut(username, password);
+    await this.loginForm.submit();
+  }
+}
+```
+
+And then here's how you'd use it:
+
+`someScript.js`:
+
+```javascript
 // it's assumed that driver is a WebDriver instance
 
 const page = new LoginPage(driver);
