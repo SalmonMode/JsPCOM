@@ -32,9 +32,9 @@ class Username extends PageComponent {
 export class LoginForm extends PageComponent {
   _locator = By.id('loginForm');
 
-  @Component
+  @Component()
   username: Username;
-  @Component
+  @Component()
   password: Password;
 
   async fillOut(username: string, password: string) {
@@ -52,7 +52,7 @@ import { Page, Component } from 'tspcom';
 import { LoginForm } from './components/login';
 
 class LoginPage extends Page {
-  @Component
+  @Component()
   loginForm: LoginForm;
 
   async login(username: string, password: string) {
