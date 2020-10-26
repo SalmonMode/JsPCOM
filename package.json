@@ -1,7 +1,7 @@
 {
   "name": "tspcom",
   "version": "1.0.0",
-  "description": "JavaScript page component object framework for Selenium",
+  "description": "TypeScript and JavaScript page component object framework for Selenium",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SalmonMode/JsPCOM.git"
+    "url": "git+https://github.com/SalmonMode/TsPCOM.git"
   },
   "keywords": [
     "javascript",
