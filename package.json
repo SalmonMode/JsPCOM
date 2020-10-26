@@ -1,5 +1,5 @@
 {
-  "name": "tspcom",
+  "name": "TsPCOM",
   "version": "1.0.0",
   "description": "TypeScript and JavaScript page component object framework for Selenium",
   "main": "dist/index.js",
