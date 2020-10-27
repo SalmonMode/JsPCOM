@@ -1,24 +1,19 @@
 import 'reflect-metadata';
-import { Locator, WebDriver, WebElement } from 'selenium-webdriver';
-import { Page } from './page';
+import { By, Locator, WebDriver, WebElement } from 'selenium-webdriver';
+import { ComponentManager } from './componentManager';
 
-export class PageComponent {
-  _locator: Locator;
-  protected _findFromParent: boolean = false;
-  protected get _componentMapping(): { [componentName: string]: typeof PageComponent} { return {}};
-  constructor(public parent: PageComponent | Page, public driver: WebDriver, ...args: any[]) {
-    for (let propertyKey in this._componentMapping) {
-      const ComponentClass = this._componentMapping[propertyKey];
-      Object.defineProperty(this, propertyKey, {
-        get: function() {
-          return new ComponentClass(this, this.driver);
-        }
-      });
-    }
+export class PageComponent extends ComponentManager {
+  get _locator(): Locator { return By.xpath('/') };
+  get _findFromParent(): boolean { return false };
+  constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
+    super(driver);
   }
 
   protected async _getReferenceNode(): Promise<WebElement | WebDriver> {
-    return this._findFromParent && this.parent instanceof PageComponent ? await this.parent.getElement() : this.driver;
+    if (this._findFromParent && this.parent instanceof PageComponent) {
+      return await this.parent.getElement();
+    }
+    return this.driver;
   }
 
   async getElement(): Promise<WebElement> {
@@ -27,22 +22,22 @@ export class PageComponent {
   }
 
   async clear(): Promise<void> {
-    const element = await this.getElement()
-    return element.clear()
+    const element = await this.getElement();
+    return element.clear();
   }
   async click(): Promise<void> {
-    const element = await this.getElement()
-    return element.click()
+    const element = await this.getElement();
+    return element.click();
   }
   async findElement(locator: Locator): Promise<WebElement> {
-    const element = await this.getElement()
+    const element = await this.getElement();
     return element.findElement(locator);
   }
   async findElements(locator: Locator): Promise<WebElement[]> {
     const element = await this.getElement();
     return element.findElements(locator);
   }
-  async getAttribute(attributeName: string): Promise< string | null > {
+  async getAttribute(attributeName: string): Promise<string | null> {
     const element = await this.getElement();
     return element.getAttribute(attributeName);
   }
@@ -54,7 +49,7 @@ export class PageComponent {
     const element = await this.getElement();
     return element.getId();
   }
-  async getRect(): Promise<{height: number, width: number, x: number, y: number}> {
+  async getRect(): Promise<{ height: number; width: number; x: number; y: number }> {
     const element = await this.getElement();
     return element.getRect();
   }
@@ -93,12 +88,8 @@ export class PageComponent {
 }
 
 export function Component(...args: any[]) {
-  return function <T extends PageComponent>(target: Object, propertyKey: string) {
+  return function (target: ComponentManager, propertyKey: string) {
     var ComponentClass = Reflect.getMetadata('design:type', target, propertyKey);
-    Object.defineProperty(target, propertyKey, {
-      get: function (): T {
-        return new ComponentClass(this, this.driver, ...args);
-      },
-    });
+    target._attachComponentAs(propertyKey, ComponentClass, ...args);
   };
 }
