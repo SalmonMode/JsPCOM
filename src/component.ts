@@ -22,7 +22,7 @@ export class PageComponent extends ComponentManager {
 
   async getElement(): Promise<WebElement> {
     let refNode = await this.getReferenceNode();
-    return refNode.findElement(this.locator);
+    return refNode.findElement(this.locator || this.constructor.locator);
   }
 
   async clear(): Promise<void> {
