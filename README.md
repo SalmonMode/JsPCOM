@@ -91,11 +91,9 @@ class Username extends PageComponent {
 }
 export class LoginForm extends PageComponent {
   locator = By.id('loginForm');
-  get componentMappings() {
-    return {
-      username: Username,
-      password: Password
-    };
+  componentMappings = {
+    username: Username,
+    password: Password
   }
 
   async fillOut(username: string, password: string) {
@@ -113,10 +111,8 @@ const { Page } = require('jspcom');
 const { LoginForm } = require('./components/login');
 
 class LoginPage extends Page {
-  get componentMappings() {
-    return {
-      loginForm: LoginForm
-    };
+  componentMappings = {
+    loginForm: LoginForm
   }
 
   async login(username: string, password: string) {
@@ -134,6 +130,8 @@ And then here's how you'd use it:
 // it's assumed that driver is a WebDriver instance
 
 const page = new LoginPage(driver);
+// always necessary to parse components
+await page.loaded;
 await page.login('myusername', 'mypassword');
 ```
 
@@ -143,22 +141,13 @@ Both `Page` and `PageComponent` objects will automatically try to kick off all o
 
 The components are only instantiated when you reference them though, so it's recommended to do this either in each component's manager's `conditions` or by overriding the component's manager's `wait` method.
 
-### :warning: It is _highly_ recommended to use _getters_
+### :warning: Always await `.loaded`, and never call `.wait` directly
 
-Due to how JavaScript currently works, it's not exactly possible to make sure things like the `locator` attribute is getting set when it should, and this can be a problem for wait logic, as they might need to have those attributes set before they start.
+Due to how JavaScript works, it's not currently possible to make sure the component mapping is attached to the instance object before the framework attempts to parse that mapping in the constructor alone (as super calls will be necessary and it could get pretty boilerplate-y in the constructors themselves). As a result, it's always necessary to call `await page.loaded` before trying to do anything with the page object (so ideally, this would be done right after instantiating it).
 
-Additionally, you can use closures when defining your conditions to get easy access to things like the component instance.
+Related to this, is also necessary to never call `.wait` directly. The reason for this, is because `.loaded` is a getter that triggers the component parsing right before it makes a call to `.wait`. `.loaded` returns the `Promise` provided by `.wait`, so that's what JS would be awaiting, but it needs to have the components parsed before then.
 
-Because of this, it's highly recommended to provide these pieces of information (if needed) through getters to make sure they are available when they should be, otherwise proper functionality can't be guaranteed:
-
-1. `locator`
-2. `findFromParent`
-3. `conditions`
-4. `componentMappings` (only if you aren't using the `@Component()` approach)
-
-The above examples get away without getters because they don't have any waiting conditions to worry about.
-
-### Waiting example
+### Waiting logic example
 
 Let's say you want the `LoginPage` to wait for the page to be fully rendered before proceeding, as the `LoginForm` is rendered after the `document.readystate` has been set to `complete` because it was rendered via JavaScript, but you know that as long as the form is actually rendered, you should be good. Here's how that could look:
 
@@ -171,30 +160,22 @@ import { PageComponent, Component } from 'jspcom';
 import { By } from 'selenium-webdriver';
 
 class Password extends PageComponent {
-  get locator(): Locator {
-    return By.id('password');
-    }
+  locator: Locator = By.id('password');
 }
 class Username extends PageComponent {
-  get locator(): Locator {
-    return By.id('username');
-  }
+  locator: Locator = By.id('username');
 }
 export class LoginForm extends PageComponent {
-  get locator(): Locator {
-    return By.id('loginForm');
-  }
+  locator: Locator = By.id('loginForm');
 
   @Component()
   username: Username;
   @Component()
   password: Password;
 
-  get conditions(): <() => any>[] {
-    return [
-      () => this.isDisplayed(),
-    ]
-  }
+  conditions: <() => any>[] = [
+    () => this.isDisplayed(),
+  ]
 
   async fillOut(username: string, password: string) {
     await this.username.sendKeys(username);
@@ -215,6 +196,7 @@ class LoginPage extends Page {
   loginForm: LoginForm;
 
   async wait() {
+    // never call `wait` directly
     await this.loginForm.loaded;
   }
 

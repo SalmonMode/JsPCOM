@@ -3,9 +3,7 @@ import { Locator, WebDriver, WebElement } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
-  get locator(): Locator | null {
-    return null;
-  }
+  locator: Locator;
   static get locator(): Locator | null {
     return null;
   }

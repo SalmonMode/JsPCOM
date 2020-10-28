@@ -2,19 +2,15 @@ import { Condition, WebDriver } from 'selenium-webdriver';
 import { PageComponent } from './component';
 
 export class ComponentManager {
-  loaded: Promise<any>;
-  get conditions(): Condition<any>[] {
-    return [];
-  }
-
-  constructor(public driver: WebDriver) {
+  conditions: Condition<any>[] = [];
+  get loaded(): Promise<any> {
     this.parseComponents();
-    this.loaded = this.wait();
+    return this.wait();
   }
 
-  protected get componentMapping(): { [componentName: string]: typeof PageComponent } {
-    return {};
-  }
+  constructor(public driver: WebDriver) {}
+
+  protected componentMapping: { [componentName: string]: typeof PageComponent } = {};
 
   protected parseComponents() {
     for (let propertyKey in this.componentMapping) {
