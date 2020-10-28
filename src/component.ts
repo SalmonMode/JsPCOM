@@ -3,8 +3,12 @@ import { By, Locator, WebDriver, WebElement } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
-  get _locator(): Locator { return By.xpath('/') };
-  get _findFromParent(): boolean { return false };
+  get _locator(): Locator {
+    return By.xpath('/');
+  }
+  get _findFromParent(): boolean {
+    return false;
+  }
   constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
     super(driver);
   }
