@@ -1,10 +1,13 @@
 import 'reflect-metadata';
-import { By, Locator, WebDriver, WebElement } from 'selenium-webdriver';
+import { Locator, WebDriver, WebElement } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
-  get locator(): Locator {
-    return By.xpath('/');
+  get locator(): Locator | null {
+    return null;
+  }
+  static get locator(): Locator | null {
+    return null;
   }
   get findFromParent(): boolean {
     return false;
@@ -22,7 +25,11 @@ export class PageComponent extends ComponentManager {
 
   async getElement(): Promise<WebElement> {
     let refNode = await this.getReferenceNode();
-    return refNode.findElement(this.locator || this.constructor.locator);
+    const locator = this.locator;
+    if (!locator) {
+      throw new Error('Component requires a locator to be located');
+    }
+    return refNode.findElement(locator);
   }
 
   async clear(): Promise<void> {
