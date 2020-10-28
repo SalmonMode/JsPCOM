@@ -26,13 +26,13 @@ import { PageComponent, Component } from 'jspcom';
 import { By } from 'selenium-webdriver';
 
 class Password extends PageComponent {
-  _locator = By.id('password');
+  locator = By.id('password');
 }
 class Username extends PageComponent {
-  _locator = By.id('username');
+  locator = By.id('username');
 }
 export class LoginForm extends PageComponent {
-  _locator = By.id('loginForm');
+  locator = By.id('loginForm');
 
   @Component()
   username: Username;
@@ -84,14 +84,14 @@ const { By } = require('selenium-webdriver');
 const { PageComponent } = require('jspcom');
 
 class Password extends PageComponent {
-  _locator = By.id('password');
+  locator = By.id('password');
 }
 class Username extends PageComponent {
-  _locator = By.id('username');
+  locator = By.id('username');
 }
 export class LoginForm extends PageComponent {
-  _locator = By.id('loginForm');
-  get _componentMappings() {
+  locator = By.id('loginForm');
+  get componentMappings() {
     return {
       username: Username,
       password: Password
@@ -113,7 +113,7 @@ const { Page } = require('jspcom');
 const { LoginForm } = require('./components/login');
 
 class LoginPage extends Page {
-  get _componentMappings() {
+  get componentMappings() {
     return {
       loginForm: LoginForm
     };
@@ -141,20 +141,20 @@ await page.login('myusername', 'mypassword');
 
 Both `Page` and `PageComponent` objects will automatically try to kick off all of the conditions each one has as they are instantiated. "Conditions" can either be `Condition` objects made using the `Condition` class provided by `selenium-webdriver` itself (or its prefab `Condition` objects), or they can just be plain callables. But either way, they will be called repeatedly, being passed the `WebDriver` object each time, until either 1) they all return something truthy (in which case, the wait is finished successfully), or a timeout is reached (in which case, a timeout error is thrown).
 
-The components are only instantiated when you reference them though, so it's recommended to do this either in each component's manager's `_conditions` or by overriding the component's manager's `wait` method.
+The components are only instantiated when you reference them though, so it's recommended to do this either in each component's manager's `conditions` or by overriding the component's manager's `wait` method.
 
 ### :warning: It is _highly_ recommended to use _getters_
 
-Due to how JavaScript currently works, it's not exactly possible to make sure things like the `_locator` attribute is getting set when it should, and this can be a problem for wait logic, as they might need to have those attributes set before they start.
+Due to how JavaScript currently works, it's not exactly possible to make sure things like the `locator` attribute is getting set when it should, and this can be a problem for wait logic, as they might need to have those attributes set before they start.
 
 Additionally, you can use closures when defining your conditions to get easy access to things like the component instance.
 
 Because of this, it's highly recommended to provide these pieces of information (if needed) through getters to make sure they are available when they should be, otherwise proper functionality can't be guaranteed:
 
-1. `_locator`
-2. `_findFromParent`
-3. `_conditions`
-4. `_componentMappings` (only if you aren't using the `@Component()` approach)
+1. `locator`
+2. `findFromParent`
+3. `conditions`
+4. `componentMappings` (only if you aren't using the `@Component()` approach)
 
 The above examples get away without getters because they don't have any waiting conditions to worry about.
 
@@ -171,17 +171,17 @@ import { PageComponent, Component } from 'jspcom';
 import { By } from 'selenium-webdriver';
 
 class Password extends PageComponent {
-  get _locator(): Locator {
+  get locator(): Locator {
     return By.id('password');
     }
 }
 class Username extends PageComponent {
-  get _locator(): Locator {
+  get locator(): Locator {
     return By.id('username');
   }
 }
 export class LoginForm extends PageComponent {
-  get _locator(): Locator {
+  get locator(): Locator {
     return By.id('loginForm');
   }
 
@@ -190,7 +190,7 @@ export class LoginForm extends PageComponent {
   @Component()
   password: Password;
 
-  get _conditions(): <() => any>[] {
+  get conditions(): <() => any>[] {
     return [
       () => this.isDisplayed(),
     ]
@@ -215,7 +215,7 @@ class LoginPage extends Page {
   loginForm: LoginForm;
 
   async wait() {
-    await this.loginForm._loaded;
+    await this.loginForm.loaded;
   }
 
   async login(username: string, password: string) {
@@ -233,7 +233,7 @@ And then here's how you'd use it:
 // it's assumed that driver is a WebDriver instance
 
 const page = new LoginPage(driver);
-await page._loaded;
+await page.loaded;
 await page.login('myusername', 'mypassword');
 ```
 

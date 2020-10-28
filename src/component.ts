@@ -3,26 +3,26 @@ import { By, Locator, WebDriver, WebElement } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
-  get _locator(): Locator {
+  get locator(): Locator {
     return By.xpath('/');
   }
-  get _findFromParent(): boolean {
+  get findFromParent(): boolean {
     return false;
   }
   constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
     super(driver);
   }
 
-  protected async _getReferenceNode(): Promise<WebElement | WebDriver> {
-    if (this._findFromParent && this.parent instanceof PageComponent) {
+  protected async getReferenceNode(): Promise<WebElement | WebDriver> {
+    if (this.findFromParent && this.parent instanceof PageComponent) {
       return await this.parent.getElement();
     }
     return this.driver;
   }
 
   async getElement(): Promise<WebElement> {
-    let refNode = await this._getReferenceNode();
-    return refNode.findElement(this._locator);
+    let refNode = await this.getReferenceNode();
+    return refNode.findElement(this.locator);
   }
 
   async clear(): Promise<void> {
@@ -94,6 +94,6 @@ export class PageComponent extends ComponentManager {
 export function Component(...args: any[]) {
   return function (target: ComponentManager, propertyKey: string) {
     var ComponentClass = Reflect.getMetadata('design:type', target, propertyKey);
-    target._attachComponentAs(propertyKey, ComponentClass, ...args);
+    target.attachComponentAs(propertyKey, ComponentClass, ...args);
   };
 }
