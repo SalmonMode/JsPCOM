@@ -1,8 +1,9 @@
 import 'reflect-metadata';
-import { Locator, WebDriver, WebElement } from 'selenium-webdriver';
+import { Locator, WebDriver, WebElement, error } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
+  stalenessCache: WebElement | null = null;
   locator: Locator;
   static get locator(): Locator | null {
     return null;
@@ -28,6 +29,29 @@ export class PageComponent extends ComponentManager {
       throw new Error('Component requires a locator to be located');
     }
     return refNode.findElement(locator);
+  }
+
+  async cacheElementForStalenessCheck(): Promise<void> {
+    this.stalenessCache = await this.getElement();
+  }
+
+  async cacheHasGoneStale(): Promise<boolean> {
+    if (!this.stalenessCache) {
+      throw new Error('Element reference must be cached before it can be checked for staleness')
+    }
+    return await this.isCacheStale();
+  }
+
+  private async isCacheStale(): Promise<boolean> {
+    try {
+      await this.stalenessCache!.getTagName();
+    } catch (err) {
+      if (err instanceof error.StaleElementReferenceError) {
+        return true;
+      }
+      throw err;
+    }
+    return false;
   }
 
   async clear(): Promise<void> {

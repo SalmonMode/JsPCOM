@@ -222,3 +222,67 @@ await page.login('myusername', 'mypassword');
 #### JavaScript
 
 The only thing that changes between TypeScript and JavaScript (other than the `@Component()` stuff), is that JavaScript wouldn't have the type annotations.
+
+### Staleness check (and other non-initialization waits)
+
+Checking for staleness is tricky, because it relies on having a reference to the `WebElement` beforehand. This framework doesn't fetch `WebElement` references until it absolutely has to, and even then, it doesn't hold onto them. But, it does have a special private attribute (`stalenessCache`) and two special methods (`cacheElementForStalenessCheck` and `cacheHasGoneStale`) that are used specifically for enabling this sort of check.
+
+Here's how it can be used:
+
+```javascript
+class SignInForm extends PageComponent {
+  locator = By.css('#signIn');
+
+  @Component()
+  username: Username;
+  @Component()
+  password: Password;
+  @Component()
+  signInButton: SignInButton;
+  @Component()
+  errorMessage: ErrorMessage;
+
+  get conditions() {
+    return [
+      () => this.isDisplayed(),
+    ];
+  }
+
+  async fillOut(username, password) {
+    await this.username.sendKeys(username);
+    await this.password.sendKeys(password);
+  }
+
+  async submit() {
+    await this.cacheElementForStalenessCheck();
+    await this.signInButton.click();
+    await this.driver.wait(() => {
+      if (await this.cacheHasGoneStale()) {
+        return true;
+      }
+      if (await this.errorMessage.isPresent()) {
+        throw new SignInError(await this.errorMessage.getText());
+      }
+      return false;
+    });
+  }
+}
+```
+
+In this example, the submit method for the `SignInForm` knows it has to wait for either the form's `WebElement` to be removed from the DOM, or for the error message to show up after the sign in button has been clicked.
+
+If the element is removed from the DOM (which it can tell if the reference went stale), then it knows the sign in succeeded, and it can return `true`.
+
+If the element is still there, but no error has shown up, then it can return `false`, indicating it should attempt to check again.
+
+#### Throwing an error
+
+This example uses the `driver.wait` method provided by `selenium-webdriver`. This method accepts either a special `Condition` object, which is made from a `Condition` class also provided by `selenium-webdriver`, or a simple callable that return something `true` or `false` whenever it's called.
+
+If the form's element is still in the DOM, but an error message has shown up, this will throw an error, which will break out of the `wait` call, and bubble the error up.
+
+An error is thrown in the example callable to indicate that something happened that deviated from the "normal" flow. Even if the intent was to make that error show up, the page object doesn't need to know that your intent at some point would be exceptional.
+
+This is extremely helpful in the context of automated checks (and code in general), because it makes it easier to convey intent in the code. In this case, if you wanted to make sure that bad credentials made the error message show up with particular text, you could have the error have that text as its message, and then you can assert that an error with that message was thrown.
+
+Even better, when you intended it to get through signing in without issues, but one occurred, that error could contain some extremely helpful information to indicate what went wrong before investing more time into debugging it.
