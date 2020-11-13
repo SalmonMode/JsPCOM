@@ -31,6 +31,18 @@ export class PageComponent extends ComponentManager {
     return refNode.findElement(locator);
   }
 
+  async isPresent() {
+    try {
+      await this.getElement();
+    } catch (err) {
+      if (err instanceof error.NoSuchElementError) {
+        return false;
+      }
+      throw err;
+    }
+    return true;
+  }
+
   async cacheElementForStalenessCheck(): Promise<void> {
     this.stalenessCache = await this.getElement();
   }
