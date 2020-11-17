@@ -23,7 +23,7 @@ export class PageComponent extends ComponentManager {
   }
 
   async getElement(): Promise<WebElement> {
-    let refNode = await this.getReferenceNode();
+    const refNode = await this.getReferenceNode();
     const locator = this.locator;
     if (!locator) {
       throw new Error('Component requires a locator to be located');
@@ -138,8 +138,8 @@ export class PageComponent extends ComponentManager {
 }
 
 export function Component(...args: any[]) {
-  return function (target: ComponentManager, propertyKey: string) {
-    var ComponentClass = Reflect.getMetadata('design:type', target, propertyKey);
+  return (target: ComponentManager, propertyKey: string) => {
+    const ComponentClass = Reflect.getMetadata('design:type', target, propertyKey);
     target.attachComponentAs(propertyKey, ComponentClass, ...args);
   };
 }

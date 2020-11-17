@@ -46,8 +46,9 @@
   },
   "homepage": "https://github.com/SalmonMode/JsPCOM#readme",
   "devDependencies": {
+    "eslint": "^7.13.0",
     "tslint": "^6.1.3",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.5"
   },
   "dependencies": {
     "@types/selenium-webdriver": "^4.0.9",

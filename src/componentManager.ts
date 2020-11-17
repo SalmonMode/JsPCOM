@@ -13,7 +13,7 @@ export class ComponentManager {
   protected componentMapping: { [componentName: string]: typeof PageComponent } = {};
 
   protected parseComponents() {
-    for (let propertyKey in this.componentMapping) {
+    for (const propertyKey of Object.keys(this.componentMapping)) {
       const ComponentClass = this.componentMapping[propertyKey];
       this.attachComponentAs(propertyKey, ComponentClass);
     }
@@ -25,7 +25,7 @@ export class ComponentManager {
 
   attachComponentAs(propertyKey: string, ComponentClass: typeof PageComponent, ...args: any[]) {
     Object.defineProperty(this, propertyKey, {
-      get: function () {
+      get() {
         return new ComponentClass(this, this.driver, ...args);
       },
     });
