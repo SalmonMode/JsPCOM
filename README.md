@@ -286,3 +286,34 @@ An error is thrown in the example callable to indicate that something happened t
 This is extremely helpful in the context of automated checks (and code in general), because it makes it easier to convey intent in the code. In this case, if you wanted to make sure that bad credentials made the error message show up with particular text, you could have the error have that text as its message, and then you can assert that an error with that message was thrown.
 
 Even better, when you intended it to get through signing in without issues, but one occurred, that error could contain some extremely helpful information to indicate what went wrong before investing more time into debugging it.
+
+## Working with iFrames
+
+iFrames are tricky, as you need to switch to them before you can do anything inside of them, or even to see inside of them at all. Some convenience methods have been provided for you to use and build off of when working with iFrames. Here's a quick example:
+
+```typescript
+class Something extends PageComponent {
+  locator = By.css('.thing');
+
+  async click() {
+    await this.parent.switchTo();
+    await this.click();
+    await this.switchToParentFrame();
+  }
+}
+
+class SomeIframe extends IframePageComponent {
+  locator = By.css('iframe');
+
+  @Component
+  something: Something;
+
+  conditions = [
+    this.iFrameIsReady,
+  ];
+
+  async doTheThing() {
+    await this.something.click();
+  }
+}
+```

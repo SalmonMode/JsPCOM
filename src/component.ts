@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Locator, WebDriver, WebElement, error } from 'selenium-webdriver';
+import { Locator, WebDriver, WebElement, error, TargetLocator } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
@@ -41,6 +41,11 @@ export class PageComponent extends ComponentManager {
       throw err;
     }
     return true;
+  }
+
+  async switchToParentFrame(): Promise<void> {
+    const targetLocator = new TargetLocator(this.driver);
+    await targetLocator.parentFrame();
   }
 
   async cacheElementForStalenessCheck(): Promise<void> {
