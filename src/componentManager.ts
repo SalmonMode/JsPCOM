@@ -8,7 +8,15 @@ export class ComponentManager {
     return this.wait();
   }
 
-  constructor(public driver: WebDriver) {}
+  constructor(public driver: WebDriver) {
+    this.driver = driver;
+    if (!this.conditions) {
+      this.conditions = [];
+    }
+    if (!this.componentMapping) {
+      this.componentMapping = {};
+    }
+  }
 
   protected componentMapping: { [componentName: string]: typeof PageComponent } = {};
 
