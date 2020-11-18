@@ -12,7 +12,6 @@ export class ComponentManager {
   }
 
   constructor(public driver: WebDriver) {
-    this.driver = driver;
     if (!this.conditions) {
       this.conditions = [];
     }
