@@ -2,7 +2,10 @@ import { Condition, WebDriver } from 'selenium-webdriver';
 import { PageComponent } from './component';
 
 export class ComponentManager {
-  conditions: Condition<any>[] = [];
+  conditions: Condition<any>[];
+
+  protected componentMapping: { [componentName: string]: typeof PageComponent };
+
   get loaded(): Promise<any> {
     this.parseComponents();
     return this.wait();
@@ -17,8 +20,6 @@ export class ComponentManager {
       this.componentMapping = {};
     }
   }
-
-  protected componentMapping: { [componentName: string]: typeof PageComponent } = {};
 
   protected parseComponents() {
     for (const propertyKey of Object.keys(this.componentMapping)) {
