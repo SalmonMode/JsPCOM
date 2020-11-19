@@ -6,8 +6,12 @@ export class ComponentManager {
 
   protected componentMapping: { [componentName: string]: typeof PageComponent };
 
+  private componentsParsed: boolean = false;
+
   get loaded(): Promise<any> {
-    this.parseComponents();
+    if (!this.componentsParsed){
+      this.parseComponents();
+  }
     return this.wait();
   }
 
@@ -25,6 +29,7 @@ export class ComponentManager {
       const ComponentClass = this.componentMapping[propertyKey];
       this.attachComponentAs(propertyKey, ComponentClass);
     }
+    this.componentsParsed = true;
   }
 
   async wait(timeout: number = 10000) {
@@ -32,9 +37,11 @@ export class ComponentManager {
   }
 
   attachComponentAs(propertyKey: string, ComponentClass: typeof PageComponent, ...args: any[]) {
+    const newComp = new ComponentClass(this, this.driver, ...args);
+    newComp.parseComponents();
     Object.defineProperty(this, propertyKey, {
       get() {
-        return new ComponentClass(this, this.driver, ...args);
+        return newComp;
       },
     });
   }
