@@ -28,7 +28,7 @@ export class ComponentManager {
   }
 
   async wait(timeout: number = 10000) {
-    await Promise.all(this.conditions.map((condition) => this.driver.wait(condition, timeout)));
+    return await Promise.all(this.conditions.map((condition) => this.driver.wait(condition, timeout)));
   }
 
   attachComponentAs(propertyKey: string, ComponentClass: typeof PageComponent, ...args: any[]) {
