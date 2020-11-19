@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Locator, WebDriver, WebElement, error, TargetLocator } from 'selenium-webdriver';
+import { Locator, WebDriver, WebElement, error } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
@@ -44,8 +44,7 @@ export class PageComponent extends ComponentManager {
   }
 
   async switchToParentFrame(): Promise<void> {
-    const targetLocator = new TargetLocator(this.driver);
-    await targetLocator.parentFrame();
+    await this.driver.switchTo().parentFrame();
   }
 
   async cacheElementForStalenessCheck(): Promise<void> {
@@ -54,7 +53,7 @@ export class PageComponent extends ComponentManager {
 
   async cacheHasGoneStale(): Promise<boolean> {
     if (!this.stalenessCache) {
-      throw new Error('Element reference must be cached before it can be checked for staleness')
+      throw new Error('Element reference must be cached before it can be checked for staleness');
     }
     return await this.isCacheStale();
   }
