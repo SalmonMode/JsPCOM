@@ -3,6 +3,12 @@ JsPCOM is page component object framework for TypeScript and JavaScript based ar
 
 It's built with TypeScript in mind for some fancy, more aesthetically pleasing features, but it's just as easy to use for JavaScript.
 
+## Installation
+
+```sh
+npm install jspcom
+```
+
 ## Page "Component" Object
 
 Many have heard of the Page Object Model, but the original description [wasn't particularly effective at conveying how to build something that's easy to use and maintain (and possibly with reusable parts)](https://martinfowler.com/bliki/PageObject.html#:~:text=There%27s%20an%20argument,TwoHardThings). Many believed that page objects are [god objects](https://en.wikipedia.org/wiki/God_object) that have all the locators and logic for an entire page in one class, as that's what the original description unintentionally implied.
