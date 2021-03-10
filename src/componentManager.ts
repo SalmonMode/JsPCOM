@@ -1,7 +1,7 @@
 import { Condition, WebDriver } from 'selenium-webdriver';
 import { BaseComponent } from './baseComponent';
 
-type ComponentCondition = Condition<any> | (() => Promise<any>);
+export type ComponentCondition = Condition<any> | (() => Promise<any>);
 
 export class ComponentManager {
   get conditions(): ComponentCondition[] {
