@@ -1,5 +1,5 @@
 import { Condition, WebDriver } from 'selenium-webdriver';
-import { PageComponent } from './baseComponent';
+import { BaseComponent } from './baseComponent';
 
 type ComponentCondition = Condition<any> | (() => Promise<any>);
 
@@ -8,7 +8,7 @@ export class ComponentManager {
     return [];
   }
 
-  protected componentMapping: { [componentName: string]: typeof PageComponent };
+  protected componentMapping: { [componentName: string]: typeof BaseComponent };
 
   private componentsParsed: boolean = false;
 
@@ -37,7 +37,7 @@ export class ComponentManager {
     return await Promise.all(this.conditions.map((condition: ComponentCondition) => this.driver.wait(condition, timeout)));
   }
 
-  attachComponentAs(propertyKey: string, ComponentClass: typeof PageComponent, ...args: any[]) {
+  attachComponentAs(propertyKey: string, ComponentClass: typeof BaseComponent, ...args: any[]) {
     const newComp = new ComponentClass(this, this.driver, ...args);
     newComp.parseComponents();
     Object.defineProperty(this, propertyKey, {

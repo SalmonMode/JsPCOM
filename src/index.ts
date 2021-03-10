@@ -1,4 +1,5 @@
 import "reflect-metadata";
 export * from "./page";
-export * from "./baseComponent";
+export * from "./component";
+export * from "./dynamicComponent";
 export * from "./iframeComponent";

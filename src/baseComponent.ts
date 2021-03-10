@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Locator, WebDriver, WebElement, error } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
-export class PageComponent extends ComponentManager {
+export class BaseComponent extends ComponentManager {
   stalenessCache: WebElement | null = null;
   locator: Locator | null = null;
   static get locator(): Locator | null {
@@ -14,7 +14,7 @@ export class PageComponent extends ComponentManager {
   }
 
   protected async getReferenceNode(): Promise<WebElement | WebDriver> {
-    if (this.findFromParent && this.parent instanceof PageComponent) {
+    if (this.findFromParent && this.parent instanceof BaseComponent) {
       return await this.parent.getElement();
     }
     return this.driver;
