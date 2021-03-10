@@ -1,5 +1,5 @@
 import { Condition, WebDriver } from 'selenium-webdriver';
-import { PageComponent } from './component';
+import { PageComponent } from './baseComponent';
 
 type ComponentCondition = Condition<any> | (() => Promise<any>);
 

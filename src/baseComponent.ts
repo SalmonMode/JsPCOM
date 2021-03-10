@@ -4,7 +4,7 @@ import { ComponentManager } from './componentManager';
 
 export class PageComponent extends ComponentManager {
   stalenessCache: WebElement | null = null;
-  locator: Locator;
+  locator: Locator | null = null;
   static get locator(): Locator | null {
     return null;
   }
