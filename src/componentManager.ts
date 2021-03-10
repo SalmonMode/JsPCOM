@@ -1,8 +1,12 @@
 import { Condition, WebDriver } from 'selenium-webdriver';
 import { PageComponent } from './component';
 
+type ComponentCondition = Condition<any> | (() => Promise<any>);
+
 export class ComponentManager {
-  conditions: Condition<any>[];
+  get conditions(): ComponentCondition[] {
+    return [];
+  }
 
   protected componentMapping: { [componentName: string]: typeof PageComponent };
 
@@ -16,9 +20,6 @@ export class ComponentManager {
   }
 
   constructor(public driver: WebDriver) {
-    if (!this.conditions) {
-      this.conditions = [];
-    }
     if (!this.componentMapping) {
       this.componentMapping = {};
     }
@@ -33,7 +34,7 @@ export class ComponentManager {
   }
 
   async wait(timeout: number = 10000) {
-    return await Promise.all(this.conditions.map((condition) => this.driver.wait(condition, timeout)));
+    return await Promise.all(this.conditions.map((condition: ComponentCondition) => this.driver.wait(condition, timeout)));
   }
 
   attachComponentAs(propertyKey: string, ComponentClass: typeof PageComponent, ...args: any[]) {
