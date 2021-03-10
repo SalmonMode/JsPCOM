@@ -8,9 +8,7 @@ export class PageComponent extends ComponentManager {
   static get locator(): Locator | null {
     return null;
   }
-  get findFromParent(): boolean {
-    return false;
-  }
+  findFromParent: boolean  = false;
   constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
     super(driver);
   }
