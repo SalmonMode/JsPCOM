@@ -40,8 +40,8 @@ export class ComponentManager {
     return await Promise.all(this.conditions.map((condition: ComponentCondition) => this.driver.wait(condition, timeout)));
   }
 
-  attachComponentAs(propertyKey: string, ComponentClass: ComponentClass, ...args: any[]): void {
-    const newComp = new ComponentClass(this, this.driver, ...args);
+  attachComponentAs(propertyKey: string, CompClass: ComponentClass, ...args: any[]): void {
+    const newComp = new CompClass(this, this.driver, ...args);
     newComp.parseComponents();
     Object.defineProperty(this, propertyKey, {
       get() {
