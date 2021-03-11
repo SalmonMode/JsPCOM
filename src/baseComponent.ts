@@ -4,10 +4,6 @@ import { ComponentManager } from './componentManager';
 
 export class BaseComponent extends ComponentManager {
   stalenessCache: WebElement | null = null;
-  locator: Locator | null = null;
-  static get locator(): Locator | null {
-    return null;
-  }
   findFromParent: boolean  = false;
   constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
     super(driver);
