@@ -1,14 +1,17 @@
 import { Condition, WebDriver } from 'selenium-webdriver';
-import { BaseComponent } from './baseComponent';
+import { PageComponent } from './component';
+import { DynamicPageComponent } from './dynamicComponent';
 
 export type ComponentCondition = Condition<any> | (() => Promise<any>);
+
+type ComponentClass = typeof PageComponent | typeof DynamicPageComponent;
 
 export class ComponentManager {
   get conditions(): ComponentCondition[] {
     return [];
   }
 
-  protected componentMapping: { [componentName: string]: typeof BaseComponent };
+  protected componentMapping: { [componentName: string]: ComponentClass };
 
   private componentsParsed: boolean = false;
 
@@ -25,10 +28,10 @@ export class ComponentManager {
     }
   }
 
-  protected parseComponents() {
+  parseComponents() {
     for (const propertyKey of Object.keys(this.componentMapping)) {
-      const ComponentClass = this.componentMapping[propertyKey];
-      this.attachComponentAs(propertyKey, ComponentClass);
+      const CompClass = this.componentMapping[propertyKey];
+      this.attachComponentAs(propertyKey, CompClass);
     }
     this.componentsParsed = true;
   }
@@ -37,7 +40,7 @@ export class ComponentManager {
     return await Promise.all(this.conditions.map((condition: ComponentCondition) => this.driver.wait(condition, timeout)));
   }
 
-  attachComponentAs(propertyKey: string, ComponentClass: typeof BaseComponent, ...args: any[]) {
+  attachComponentAs(propertyKey: string, ComponentClass: ComponentClass, ...args: any[]): void {
     const newComp = new ComponentClass(this, this.driver, ...args);
     newComp.parseComponents();
     Object.defineProperty(this, propertyKey, {

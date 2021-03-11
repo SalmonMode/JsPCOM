@@ -2,9 +2,11 @@ import 'reflect-metadata';
 import { Locator, WebDriver, WebElement, error } from 'selenium-webdriver';
 import { ComponentManager } from './componentManager';
 
-export class BaseComponent extends ComponentManager {
+export abstract class BaseComponent extends ComponentManager {
   stalenessCache: WebElement | null = null;
   findFromParent: boolean  = false;
+  abstract locator: Locator | null;
+
   constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
     super(driver);
   }
