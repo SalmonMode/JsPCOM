@@ -1,6 +1,6 @@
 {
   "name": "jspcom",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "TypeScript and JavaScript page component object framework for Selenium",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
