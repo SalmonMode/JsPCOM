@@ -1,4 +1,5 @@
 import { Condition, WebDriver } from 'selenium-webdriver';
+import { BaseComponent } from './baseComponent';
 import { PageComponent } from './component';
 import { DynamicPageComponent } from './dynamicComponent';
 
@@ -41,10 +42,13 @@ export class ComponentManager {
   }
 
   attachComponentAs(propertyKey: string, CompClass: ComponentClass, ...args: any[]): void {
-    const newComp = new CompClass(this, this.driver, ...args);
-    newComp.parseComponents();
+    let newComp: BaseComponent;
     Object.defineProperty(this, propertyKey, {
       get() {
+        if (!newComp) {
+          newComp = new CompClass(this, this.driver, ...args);
+          newComp.parseComponents();
+        }
         return newComp;
       },
     });
