@@ -2,8 +2,8 @@
 
 [![codecov](https://codecov.io/gh/SalmonMode/JsPCOM/branch/main/graph/badge.svg?token=E28MMT0TC6)](https://codecov.io/gh/SalmonMode/JsPCOM)
 [![Build](https://github.com/SalmonMode/JsPCOM/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/SalmonMode/JsPCOM/actions/workflows/npm-publish.yml)
-[![Package status](https://img.shields.io/npm/v/JsPCOM.svg)](https://www.npmjs.com/package/JsPCOM)
-[![License](https://img.shields.io/npm/l/JsPCOM.svg)](https://opensource.org/licenses/MIT)
+[![Package status](https://img.shields.io/npm/v/JsPCOM.svg)](https://www.npmjs.com/package/jspcom)
+[![License](https://img.shields.io/npm/l/jspcom.svg)](https://opensource.org/licenses/MIT)
 
 JsPCOM is page component object framework for TypeScript and JavaScript based around Selenium.
 
