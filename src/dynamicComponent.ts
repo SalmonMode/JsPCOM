@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { Locator } from 'selenium-webdriver';
-import { BaseComponent } from './baseComponent';
+import type { Locator } from 'selenium-webdriver';
+import { BaseComponent } from './baseComponent.js';
 
 export class DynamicPageComponent extends BaseComponent {
   get locator(): Locator | null {

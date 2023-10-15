@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { error } from 'selenium-webdriver';
-import { PageComponent } from './component';
+import { PageComponent } from './component.js';
 
 export class IframePageComponent extends PageComponent {
   async switchTo(): Promise<void> {

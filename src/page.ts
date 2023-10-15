@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import { WebDriver } from 'selenium-webdriver';
-import { ComponentManager } from './componentManager';
+import type { WebDriver } from 'selenium-webdriver';
+import { ComponentManager } from './componentManager.js';
 
 export class Page extends ComponentManager {
-  constructor(public driver: WebDriver, ...args: any[]) {
+  constructor(public driver: WebDriver, ..._args: unknown[]) {
     super(driver);
   }
 }

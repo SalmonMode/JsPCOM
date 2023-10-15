@@ -1,13 +1,14 @@
 import 'reflect-metadata';
-import { Locator, WebDriver, WebElement, error } from 'selenium-webdriver';
-import { ComponentManager } from './componentManager';
+import { error, type Locator, type WebDriver, type WebElement } from 'selenium-webdriver';
+import type { ShadowRootPromise } from 'selenium-webdriver/lib/webdriver.js';
+import { ComponentManager } from './componentManager.js';
 
 export abstract class BaseComponent extends ComponentManager {
   stalenessCache: WebElement | null = null;
-  findFromParent: boolean  = false;
+  findFromParent: boolean = false;
   abstract locator: Locator | null;
 
-  constructor(public parent: ComponentManager, public driver: WebDriver, ...args: any[]) {
+  constructor(public parent: ComponentManager, public driver: WebDriver, ..._args: unknown[]) {
     super(driver);
   }
 
@@ -27,7 +28,7 @@ export abstract class BaseComponent extends ComponentManager {
     return refNode.findElement(locator);
   }
 
-  async isPresent() {
+  async isPresent(): Promise<boolean> {
     try {
       await this.getElement();
     } catch (err) {
@@ -118,7 +119,7 @@ export abstract class BaseComponent extends ComponentManager {
     const element = await this.getElement();
     return element.isSelected();
   }
-  async sendKeys(...args: any[]): Promise<void> {
+  async sendKeys(...args: Parameters<WebElement['sendKeys']>): Promise<void> {
     const element = await this.getElement();
     return element.sendKeys(...args);
   }
@@ -130,10 +131,14 @@ export abstract class BaseComponent extends ComponentManager {
     const element = await this.getElement();
     return element.takeScreenshot(scroll);
   }
+  async getShadowRoot(): Promise<ShadowRootPromise> {
+    const element = await this.getElement();
+    return element.getShadowRoot();
+  }
 }
 
-export function Component(...args: any[]) {
-  return (target: ComponentManager, propertyKey: string) => {
+export function Component(...args: unknown[]) {
+  return (target: ComponentManager, propertyKey: string): void => {
     const ComponentClass = Reflect.getMetadata('design:type', target, propertyKey);
     target.attachComponentAs(propertyKey, ComponentClass, ...args);
   };
