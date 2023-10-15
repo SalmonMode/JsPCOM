@@ -1,4 +1,10 @@
 # JsPCOM
+
+[![codecov](https://codecov.io/gh/SalmonMode/JsPCOM/branch/main/graph/badge.svg?token=E28MMT0TC6)](https://codecov.io/gh/SalmonMode/JsPCOM)
+[![Build](https://github.com/SalmonMode/JsPCOM/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/SalmonMode/JsPCOM/actions/workflows/npm-publish.yml)
+[![Package status](https://img.shields.io/npm/v/JsPCOM.svg)](https://www.npmjs.com/package/JsPCOM)
+[![License](https://img.shields.io/npm/l/JsPCOM.svg)](https://opensource.org/licenses/MIT)
+
 JsPCOM is page component object framework for TypeScript and JavaScript based around Selenium.
 
 It's built with TypeScript in mind for some fancy, more aesthetically pleasing features, but it's just as easy to use for JavaScript.
@@ -143,7 +149,7 @@ await page.login('myusername', 'mypassword');
 
 ## Waiting for things to load
 
-Both `Page` and `PageComponent` objects will automatically try to kick off all of the conditions each one has as they are instantiated. "Conditions" can either be `Condition` objects made using the `Condition` class provided by `selenium-webdriver` itself (or its prefab `Condition` objects), or they can just be plain callables. But either way, they will be called repeatedly, being passed the `WebDriver` object each time, until either 1) they all return something truthy (in which case, the wait is finished successfully), or a timeout is reached (in which case, a timeout error is thrown).
+Both `Page` and `PageComponent` objects will automatically try to kick off all of the "conditions" each one has as they are instantiated. "Conditions" are plain callables that return either `true` or `false`. These callables are called repeatedly until the timeout is reached, or until all of them return `true`. If the timeout is reached, an error will be thrown, and if the callables throw an error, that error will bubble up, so make sure to handle errors appropriately. The `timeout` and `pollRate` are properties of the pages and components that can be set to adjust how long and how often it will try to check.
 
 The components are only instantiated when you reference them though, so it's recommended to do this either in each component's manager's `conditions` or by overriding the component's manager's `wait` method.
 
