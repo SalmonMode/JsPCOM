@@ -1,6 +1,6 @@
 {
   "name": "jspcom",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "TypeScript and JavaScript page component object framework for Selenium",
   "type": "module",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
     "dist/**/*"
   ],
   "scripts": {
-    "test": "c8 mocha --recursive ./dist/ -x *.spec.ts",
+    "test": "c8 mocha --recursive ./dist/",
     "test:ci": "c8 mocha --recursive ./dist/ --reporter mocha-junit-reporter",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
