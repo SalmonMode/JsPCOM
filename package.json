@@ -21,6 +21,28 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
+  "c8": {
+    "extension": [
+      ".ts",
+      ".js",
+      ".jsx",
+      ".tsx"
+    ],
+    "include": [
+      "**/*.{js,jsx,ts,tsx}"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts",
+      "coverage"
+    ],
+    "reporter": [
+      "text",
+      "html",
+      "cobertura"
+    ],
+    "all": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SalmonMode/JsPCOM.git"
